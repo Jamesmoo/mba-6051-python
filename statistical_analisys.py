@@ -74,11 +74,9 @@ def sheet_101_gender_male():
     writing_scores = excel.loc[:,ExcelColumns.writing.value]
     reading_scores = excel.loc[:,ExcelColumns.reading.value]
 
-    print(math_scores)
-    print(writing_scores)
-    print(reading_scores)
+    print(math_scores, writing_scores,   reading_scores)
 
-    #print(math_scores)
+
 
 def sheet_102_gender_female():
     print('===========================')
