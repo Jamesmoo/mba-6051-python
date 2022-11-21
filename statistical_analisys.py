@@ -92,68 +92,44 @@ def start():
     outputFile.close()
 
 def summary_calc(excel, title):
-    # gets all the values in a  column, but it can only get 1 at a time
-    math_scores = excel.loc[:,ExcelColumns.math.value]
-    writing_scores = excel.loc[:,ExcelColumns.writing.value]
-    reading_scores = excel.loc[:,ExcelColumns.reading.value]
-
-    #its a pandas series object
-    #savesameline('Type of Object - just to check',str(type(math_scores)))
-
-    savesameline('Math Scores Mean:', np.mean(math_scores))
-    savesameline('Math Scores Standard Deviation:', np.std(math_scores))
-    savesameline('Math Scores Median:', np.median(math_scores))
-    savesameline('Math Scores Variance:', np.var(math_scores))
-    savesameline('Math Scores Minimum:', math_scores.min())
-    savesameline('Math Scores Max:', math_scores.max())
-    savesameline('Math Scores range:', int(math_scores.max()) - int(math_scores.min()))
-    savesameline('Math Scores Count:', math_scores.size)
-    savesameline('Math Scores Quartile 1:', math_scores.quantile(.25))
-    savesameline('Math Scores Quartile 2:', math_scores.quantile(.5))
-    savesameline('Math Scores Quartile 3:', math_scores.quantile(.75))
+    savesameline(title + ' Scores Mean:', np.mean(excel))
+    savesameline(title + ' Scores Standard Deviation:', np.std(excel))
+    savesameline(title + ' Scores Median:', np.median(excel))
+    savesameline(title + ' Scores Variance:', np.var(excel))
+    savesameline(title + ' Scores Minimum:', excel.min())
+    savesameline(title + ' Scores Max:', excel.max())
+    savesameline(title + ' Scores range:', int(excel.max()) - int(excel.min()))
+    savesameline(title + ' Scores Count:', excel.size)
+    savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
+    savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
+    savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
     newline()
 
-    savesameline('Writing Scores Mean:', np.mean(writing_scores))
-    savesameline('Writing Scores Standard Deviation:', np.std(writing_scores))
-    savesameline('Writing Scores Median:', np.median(writing_scores))
-    savesameline('Writing Scores Variance:', np.var(writing_scores))
-    savesameline('Writing Scores Minimum:', writing_scores.min())
-    savesameline('Writing Scores Max:', writing_scores.max())
-    savesameline('Writing Scores range:', int(writing_scores.max()) - int(writing_scores.min()))
-    savesameline('Writing Scores Count:', writing_scores.size)
-    savesameline('Writing Scores Quartile 1:', writing_scores.quantile(.25))
-    savesameline('Writing Scores Quartile 2:', writing_scores.quantile(.5))
-    savesameline('Writing Scores Quartile 3:', writing_scores.quantile(.75))
-    newline()
-
-    savesameline('Reading Scores Mean:', np.mean(reading_scores))
-    savesameline('Reading Scores Standard Deviation:', np.std(reading_scores))
-    savesameline('Reading Scores Median:', np.median(reading_scores))
-    savesameline('Reading Scores Variance:', np.var(reading_scores))
-    savesameline('Reading Scores Minimum:', reading_scores.min())
-    savesameline('Reading Scores Max:', reading_scores.max())
-    savesameline('Reading Scores range:', int(reading_scores.max()) - int(reading_scores.min()))
-    savesameline('Reading Scores Count:', reading_scores.size)
-    savesameline('Reading Scores Quartile 1:', reading_scores.quantile(.25))
-    savesameline('Reading Scores Quartile 2:', reading_scores.quantile(.5))
-    savesameline('Reading Scores Quartile 3:', reading_scores.quantile(.75))
-    newline()
 
 def sheet_101_gender_male():
     save('==========================================')
     save('Sheet: 101 Gender Male')
     save('==========================================')
     excel = loadExcelSheet(ExcelSheets.gender_male_101)
+
     math_scores = excel.loc[:,ExcelColumns.math.value]
     writing_scores = excel.loc[:,ExcelColumns.writing.value]
     reading_scores = excel.loc[:,ExcelColumns.reading.value]
 
-    summary_calc(excel)
-
+    summary_calc(math_scores, 'Math')
+    summary_calc(writing_scores, 'Writing')
+    summary_calc(reading_scores, 'Reading')
 
 def sheet_102_gender_female():
     save('==========================================')
     save('Sheet: 102 Gender Female')
     save('==========================================')
     excel = loadExcelSheet(ExcelSheets.gender_female_102)
-    summary_calc(excel)
+
+    math_scores = excel.loc[:,ExcelColumns.math.value]
+    writing_scores = excel.loc[:,ExcelColumns.writing.value]
+    reading_scores = excel.loc[:,ExcelColumns.reading.value]
+
+    summary_calc(math_scores, 'Math')
+    summary_calc(writing_scores, 'Writing')
+    summary_calc(reading_scores, 'Reading')
