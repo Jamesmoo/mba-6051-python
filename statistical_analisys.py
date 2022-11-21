@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import xlrd as xlrd
 from enum import Enum
+import os
 
 # read excel file links:
 # https://www.geeksforgeeks.org/reading-excel-file-using-python/
@@ -13,7 +14,15 @@ from enum import Enum
 
 
 #global variables
-pathToFile = "C:\\my-sync\\MBA 6051\\Group Project - Student Grades\\Student Grades Data.xlsx"
+folderPath = "C:\\my-sync\\MBA 6051\\Group Project - Student Grades\\"
+excelFileName = "Student Grades Data.xlsx"
+completeExcelPath = folderPath + excelFileName
+
+outputFilePath = folderPath + "stats_calculation.txt"
+if os.path.exists(outputFilePath):
+    os.remove(outputFilePath)
+outputFile = open(outputFilePath, "a")
+
 allColumns = ['gender', 'ethnicity', 'parental level of education', 'lunch',
               'test preparation course', 'math score', 'reading score', 'writing score']
 
@@ -50,23 +59,36 @@ class ExcelSheets(Enum):
     m4_score_correlation = 18
     m5_population_proportions = 19
 
-
 # NOTE: all sheets must have headers in row 10
 # manual sheets have headers in row 1
 # this must be constant on all excel sheet
+
+def save(text):
+    parsed_text = str(text)
+    outputFile.write(parsed_text)
+    outputFile.write("\n")
+    print(parsed_text)
+    print("\n")
+
+
 def loadExcelSheet(sheetnumber):
     table_header = 9
     if sheetnumber.value > 14:
         table_header = 0
-    return pd.read_excel(pathToFile, sheet_name=sheetnumber.value, header=table_header)
+    return pd.read_excel(completeExcelPath, sheet_name=sheetnumber.value, header=table_header)
 
 def start():
+
+
     # each sheet analysis will be its own definition
     sheet_101_gender_male()
 
+    outputFile.close()
+
 def sheet_101_gender_male():
-    print('===========================')
-    print('Sheet: 101 Gender Male')
+    save('==========================================')
+    save('Sheet: 101 Gender Male')
+    save('==========================================')
     excel = loadExcelSheet(ExcelSheets.gender_male_101)
 
     # gets all the values in a  column, but it can only get 1 at a time
@@ -74,8 +96,12 @@ def sheet_101_gender_male():
     writing_scores = excel.loc[:,ExcelColumns.writing.value]
     reading_scores = excel.loc[:,ExcelColumns.reading.value]
 
-    print(math_scores, writing_scores,   reading_scores)
-
+    save('Math Scores')
+    save(math_scores)
+    save('Writing Scores')
+    save(writing_scores)
+    save('Reading Scores')
+    save(reading_scores)
 
 
 def sheet_102_gender_female():
