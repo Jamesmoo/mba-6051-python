@@ -1,7 +1,8 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy as sp
+import scipy as stats
+import seaborn as sns
 from enum import Enum
 import os
 
@@ -11,6 +12,8 @@ import os
 # https://www.digitalocean.com/community/tutorials/pandas-read_excel-reading-excel-file-in-python
 # https://www.youtube.com/watch?v=FniLzpaSFGk
 # https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html
+
+#outliers https://hersanyagci.medium.com/detecting-and-handling-outliers-with-pandas-7adbfcd5cad8
 
 
 #global variables
@@ -91,6 +94,7 @@ def start():
 
     outputFile.close()
 
+
 def summary_calc(excel, title):
     savesameline(title + ' Scores Mean:', np.mean(excel))
     savesameline(title + ' Scores Standard Deviation:', np.std(excel))
@@ -103,8 +107,9 @@ def summary_calc(excel, title):
     savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
     savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
     savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
-    newline()
 
+    sns.boxplot(excel)
+    newline()
 
 def sheet_101_gender_male():
     save('==========================================')
@@ -120,6 +125,15 @@ def sheet_101_gender_male():
     summary_calc(writing_scores, 'Writing')
     summary_calc(reading_scores, 'Reading')
 
+    math_outliers = math_scores
+    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
+
+    writing_outliers = writing_scores
+    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
+
+    reading_outliers = reading_scores
+    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
+
 def sheet_102_gender_female():
     save('==========================================')
     save('Sheet: 102 Gender Female')
@@ -133,3 +147,13 @@ def sheet_102_gender_female():
     summary_calc(math_scores, 'Math')
     summary_calc(writing_scores, 'Writing')
     summary_calc(reading_scores, 'Reading')
+
+    math_outliers = math_scores
+    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
+
+    writing_outliers = writing_scores
+    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
+
+    reading_outliers = reading_scores
+    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
+
