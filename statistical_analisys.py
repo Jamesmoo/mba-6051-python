@@ -65,11 +65,18 @@ class ExcelSheets(Enum):
 
 def save(text):
     parsed_text = str(text)
-    outputFile.write(parsed_text)
-    outputFile.write("\n")
     print(parsed_text)
-    print("\n")
+    outputFile.write(parsed_text)
+    newline()
 
+def savesameline(textOne, textTwo):
+    parsed_text = str(textOne) + ' ' + str(textTwo)
+    print(parsed_text)
+    outputFile.write(parsed_text)
+    newline()
+def newline():
+    print('\n')
+    outputFile.write("\n")
 
 def loadExcelSheet(sheetnumber):
     table_header = 9
@@ -78,33 +85,57 @@ def loadExcelSheet(sheetnumber):
     return pd.read_excel(completeExcelPath, sheet_name=sheetnumber.value, header=table_header)
 
 def start():
-
-
     # each sheet analysis will be its own definition
     sheet_101_gender_male()
+    sheet_102_gender_female()
 
     outputFile.close()
 
-def sheet_101_gender_male():
-    save('==========================================')
-    save('Sheet: 101 Gender Male')
-    save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.gender_male_101)
-
+def summary_calc(excel):
     # gets all the values in a  column, but it can only get 1 at a time
     math_scores = excel.loc[:,ExcelColumns.math.value]
     writing_scores = excel.loc[:,ExcelColumns.writing.value]
     reading_scores = excel.loc[:,ExcelColumns.reading.value]
 
-    save('Math Scores')
-    save(math_scores)
-    save('Writing Scores')
-    save(writing_scores)
-    save('Reading Scores')
-    save(reading_scores)
 
+    savesameline('Math Scores Mean:', np.mean(math_scores))
+    savesameline('Math Scores Standard Deviation:', np.std(math_scores))
+    savesameline('Math Scores Median:', np.median(math_scores))
+    savesameline('Math Scores Variance:', np.var(math_scores))
+    #savesameline('Math Scores Minimum:', np.minimum(math_scores))
+    #savesameline('Math Scores maximum:', np.maximum(math_scores))
+    #savesameline('Math Scores range:', np.arange(math_scores))
+    newline()
 
+    savesameline('Writing Scores Mean:', np.mean(writing_scores))
+    savesameline('Writing Scores Standard Deviation:', np.std(writing_scores))
+    savesameline('Writing Scores Median:', np.median(writing_scores))
+    savesameline('Writing Scores Variance:', np.var(writing_scores))
+    #savesameline('Writing Scores Minimum:', np.minimum(writing_scores))
+    #savesameline('Writing Scores maximum:', np.maximum(writing_scores))
+    #savesameline('Writing Scores range:', np.arange(writing_scores))
+    newline()
+
+    savesameline('Reading Scores Mean:', np.mean(reading_scores))
+    savesameline('Reading Scores Standard Deviation:', np.std(reading_scores))
+    savesameline('Reading Scores Median:', np.median(reading_scores))
+    savesameline('Reading Scores Variance:', np.var(reading_scores))
+    #savesameline('Reading Scores Minimum:', np.minimum(reading_scores))
+    #savesameline('Reading Scores maximum:', np.maximum(reading_scores))
+    #savesameline('Reading Scores range:', np.arange(reading_scores))
+    newline()
+
+def sheet_101_gender_male():
+    save('==========================================')
+    save('Sheet: 101 Gender Male')
+    save('==========================================')
+
+    excel = loadExcelSheet(ExcelSheets.gender_male_101)
+    summary_calc(excel)
 def sheet_102_gender_female():
-    print('===========================')
-    print('Sheet: 102 Gender Female')
+    save('==========================================')
+    save('Sheet: 102 Gender Female')
+    save('==========================================')
+
     excel = loadExcelSheet(ExcelSheets.gender_female_102)
+    summary_calc(excel)
