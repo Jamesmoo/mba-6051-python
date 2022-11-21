@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
-import xlrd as xlrd
+import scipy as sp
 from enum import Enum
 import os
 
