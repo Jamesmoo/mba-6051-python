@@ -21,7 +21,7 @@ folderPath = "C:\\my-sync\\MBA 6051\\Group Project - Student Grades\\"
 excelFileName = "Student Grades Data.xlsx"
 completeExcelPath = folderPath + excelFileName
 
-outputFilePath = folderPath + "stats_calculation.txt"
+outputFilePath = folderPath + "python_stats_calculation.txt"
 if os.path.exists(outputFilePath):
     os.remove(outputFilePath)
 outputFile = open(outputFilePath, "a")
