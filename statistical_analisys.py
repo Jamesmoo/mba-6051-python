@@ -89,13 +89,12 @@ def loadExcelSheet(sheetnumber):
 
 def start():
     # each sheet analysis will be its own definition
-    sheet_101_gender_male()
-    sheet_102_gender_female()
-    sheet_104_ethnicity_group_a()
-    sheet_105_ethnicity_group_b()
-    sheet_106_ethnicity_group_c()
-    sheet_107_ethnicity_group_d()
-
+    math_reading_writing('Sheet: 101 Gender Male', loadExcelSheet(ExcelSheets.gender_male_101))
+    math_reading_writing('Sheet: 102 Gender Female', loadExcelSheet(ExcelSheets.gender_female_102))
+    math_reading_writing('Sheet: 104 Ethnicity Group A', loadExcelSheet(ExcelSheets.ethnicity_group_a_104))
+    math_reading_writing('Sheet: 105 Ethnicity Group B', loadExcelSheet(ExcelSheets.ethnicity_group_b_105))
+    math_reading_writing('Sheet: 106 Ethnicity Group C', loadExcelSheet(ExcelSheets.ethnicity_group_c_106))
+    math_reading_writing('Sheet: 107 Ethnicity Group D', loadExcelSheet(ExcelSheets.ethnicity_group_d_107))
     outputFile.close()
 
 
@@ -111,61 +110,12 @@ def summary_calc(excel, title):
     savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
     savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
     savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
-
-    sns.boxplot(excel)
     newline()
 
-def sheet_101_gender_male():
+def math_reading_writing(title, excel):
     save('==========================================')
-    save('Sheet: 101 Gender Male')
+    save(title)
     save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.gender_male_101)
-
-    math_scores = excel.loc[:,ExcelColumns.math.value]
-    writing_scores = excel.loc[:,ExcelColumns.writing.value]
-    reading_scores = excel.loc[:,ExcelColumns.reading.value]
-
-    summary_calc(math_scores, 'Math')
-    summary_calc(writing_scores, 'Writing')
-    summary_calc(reading_scores, 'Reading')
-
-    math_outliers = math_scores
-    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
-
-    writing_outliers = writing_scores
-    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
-
-    reading_outliers = reading_scores
-    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
-
-def sheet_102_gender_female():
-    save('==========================================')
-    save('Sheet: 102 Gender Female')
-    save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.gender_female_102)
-
-    math_scores = excel.loc[:,ExcelColumns.math.value]
-    writing_scores = excel.loc[:,ExcelColumns.writing.value]
-    reading_scores = excel.loc[:,ExcelColumns.reading.value]
-
-    summary_calc(math_scores, 'Math')
-    summary_calc(writing_scores, 'Writing')
-    summary_calc(reading_scores, 'Reading')
-
-    math_outliers = math_scores
-    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
-
-    writing_outliers = writing_scores
-    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
-
-    reading_outliers = reading_scores
-    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
-
-def sheet_104_ethnicity_group_a():
-    save('==========================================')
-    save('Sheet: 104 Ethnicity Group A')
-    save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.ethnicity_group_a_104)
 
     math_scores = excel.loc[:, ExcelColumns.math.value]
     writing_scores = excel.loc[:, ExcelColumns.writing.value]
@@ -183,73 +133,3 @@ def sheet_104_ethnicity_group_a():
 
     reading_outliers = reading_scores
     summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
-
-def sheet_105_ethnicity_group_b():
-    save('==========================================')
-    save('Sheet: 104 Ethnicity Group B')
-    save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.ethnicity_group_b_105)
-
-    math_scores = excel.loc[:, ExcelColumns.math.value]
-    writing_scores = excel.loc[:, ExcelColumns.writing.value]
-    reading_scores = excel.loc[:, ExcelColumns.reading.value]
-
-    summary_calc(math_scores, 'Math')
-    summary_calc(writing_scores, 'Writing')
-    summary_calc(reading_scores, 'Reading')
-
-    math_outliers = math_scores
-    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
-
-    writing_outliers = writing_scores
-    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
-
-    reading_outliers = reading_scores
-    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
-
-def sheet_106_ethnicity_group_c():
-    save('==========================================')
-    save('Sheet: 104 Ethnicity Group C')
-    save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.ethnicity_group_c_106)
-
-    math_scores = excel.loc[:, ExcelColumns.math.value]
-    writing_scores = excel.loc[:, ExcelColumns.writing.value]
-    reading_scores = excel.loc[:, ExcelColumns.reading.value]
-
-    summary_calc(math_scores, 'Math')
-    summary_calc(writing_scores, 'Writing')
-    summary_calc(reading_scores, 'Reading')
-
-    math_outliers = math_scores
-    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
-
-    writing_outliers = writing_scores
-    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
-
-    reading_outliers = reading_scores
-    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
-
-def sheet_107_ethnicity_group_d():
-    save('==========================================')
-    save('Sheet: 104 Ethnicity Group D')
-    save('==========================================')
-    excel = loadExcelSheet(ExcelSheets.ethnicity_group_d_107)
-
-    math_scores = excel.loc[:, ExcelColumns.math.value]
-    writing_scores = excel.loc[:, ExcelColumns.writing.value]
-    reading_scores = excel.loc[:, ExcelColumns.reading.value]
-
-    summary_calc(math_scores, 'Math')
-    summary_calc(writing_scores, 'Writing')
-    summary_calc(reading_scores, 'Reading')
-
-    math_outliers = math_scores
-    summary_calc(math_outliers.dropna(), 'Math - Outliers removed -')
-
-    writing_outliers = writing_scores
-    summary_calc(writing_outliers.dropna(), 'Writing - Outliers removed -')
-
-    reading_outliers = reading_scores
-    summary_calc(reading_outliers.dropna(), 'Reading - Outliers removed -')
-
