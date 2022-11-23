@@ -6,16 +6,19 @@ import seaborn as sns
 from enum import Enum
 import os
 
-# read excel file links:
-# https://www.geeksforgeeks.org/reading-excel-file-using-python/
-# https://xlrd.readthedocs.io/en/latest/
-# https://www.digitalocean.com/community/tutorials/pandas-read_excel-reading-excel-file-in-python
-# https://www.youtube.com/watch?v=FniLzpaSFGk
-# https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html
+"""
+These are links for doing things in python
+read excel file links:
+https://www.geeksforgeeks.org/reading-excel-file-using-python/
+https://xlrd.readthedocs.io/en/latest/
+https://www.digitalocean.com/community/tutorials/pandas-read_excel-reading-excel-file-in-python
+https://www.youtube.com/watch?v=FniLzpaSFGk
+https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html
 
-#outliers https://hersanyagci.medium.com/detecting-and-handling-outliers-with-pandas-7adbfcd5cad8
-#outliers https://linuxhint.com/pandas-remove-outliers/
-
+outliers 
+https://hersanyagci.medium.com/detecting-and-handling-outliers-with-pandas-7adbfcd5cad8
+https://linuxhint.com/pandas-remove-outliers/
+"""
 
 #global variables
 folderPath = "C:\\my-sync\\MBA 6051\\Group Project - Student Grades\\"
@@ -102,6 +105,7 @@ def start():
 
 
 def summary_calc(excel, title):
+    #print(type(excel), 'struct')
     savesameline(title + ' Scores Mean:', np.mean(excel))
     savesameline(title + ' Scores Standard Deviation:', np.std(excel))
     savesameline(title + ' Scores Median:', np.median(excel))
@@ -110,6 +114,30 @@ def summary_calc(excel, title):
     savesameline(title + ' Scores Max:', excel.max())
     savesameline(title + ' Scores range:', int(excel.max()) - int(excel.min()))
     savesameline(title + ' Scores Count:', excel.size)
+
+    std = excel.std()
+    mean = np.mean(excel)
+    z_score = (excel - mean) / std
+    # print(z_score, 'z-score')
+
+    outliers = excel[abs(z_score) > 3]
+    # print(outliers)
+    #
+    quantile_one = excel.quantile(.25)
+    quantile_three = excel.quantile(.75)
+    inter_quantile_range = quantile_three - quantile_one
+    upper_threshold = quantile_three + 1.5 * inter_quantile_range
+    lower_threshold = quantile_one - 1.5 * inter_quantile_range
+
+    no_outliers = excel[abs(z_score) <= 3]
+    print(no_outliers)
+
+    savesameline(title + 'q1', quantile_one)
+    savesameline(title + 'q3', quantile_three)
+    savesameline(title + 'iqr', inter_quantile_range)
+    savesameline(title + 'upper', upper_threshold)
+    savesameline(title + 'lower', lower_threshold)
+
     savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
     savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
     savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
@@ -127,6 +155,19 @@ def math_reading_writing(title, excel):
     summary_calc(math_scores, 'Math')
     summary_calc(writing_scores, 'Writing')
     summary_calc(reading_scores, 'Reading')
+
+    """
+        stats.stats.zscore()
+        a_no_outliers = a[(np.abs(stats.zscore(a)) < 3)]
+        print(a_no_outliers)
+    """
+
+    print(type(excel))
+    # outliers = excel[(np.abs(stats.stats.zscore(excel)) < 3).all(axis=1)]
+    # print(np.abs(stats.stats.zscore(excel)))
+    # excel_no_outliers = excel[(np.abs(stats.stats.zscore(excel)) < 3)]
+    # print(excel_no_outliers)
+
 
     #outliers
     summary_calc(math_scores.dropna(), 'Math - Outliers removed -')
