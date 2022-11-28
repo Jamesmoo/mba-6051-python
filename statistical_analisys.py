@@ -65,6 +65,14 @@ class ExcelSheets(Enum):
     m3_writing_score_frequency = 17
     m4_score_correlation = 18
     m5_population_proportions = 19
+    group_a_parent_ed_115 = 20
+    group_b_parent_ed_116 = 21
+    group_c_parent_ed_117 = 22
+    group_d_parent_ed_118 = 23
+    ethnicity_group_e_119 = 24
+    group_e_parent_ed_118 = 25
+    random_sample_20 = 26
+    random_sample_30 = 27
 
 # NOTE: all sheets must have headers in row 10
 # manual sheets have headers in row 1
@@ -94,12 +102,13 @@ def loadExcelSheet(sheetnumber):
 def start():
     print('Processing Started')
     # each sheet analysis will be its own definition
-    math_reading_writing('Sheet: 101 Gender Male', loadExcelSheet(ExcelSheets.gender_male_101))
-    math_reading_writing('Sheet: 102 Gender Female', loadExcelSheet(ExcelSheets.gender_female_102))
-    math_reading_writing('Sheet: 104 Ethnicity Group A', loadExcelSheet(ExcelSheets.ethnicity_group_a_104))
-    math_reading_writing('Sheet: 105 Ethnicity Group B', loadExcelSheet(ExcelSheets.ethnicity_group_b_105))
-    math_reading_writing('Sheet: 106 Ethnicity Group C', loadExcelSheet(ExcelSheets.ethnicity_group_c_106))
-    math_reading_writing('Sheet: 107 Ethnicity Group D', loadExcelSheet(ExcelSheets.ethnicity_group_d_107))
+    math_reading_writing('Python Check - Sheet: 101 Gender Male', loadExcelSheet(ExcelSheets.gender_male_101))
+    math_reading_writing('Python Check - Sheet: 102 Gender Female', loadExcelSheet(ExcelSheets.gender_female_102))
+    math_reading_writing('Python Check - Sheet: 104 Ethnicity Group A', loadExcelSheet(ExcelSheets.ethnicity_group_a_104))
+    math_reading_writing('Python Check - Sheet: 105 Ethnicity Group B', loadExcelSheet(ExcelSheets.ethnicity_group_b_105))
+    math_reading_writing('Python Check - Sheet: 106 Ethnicity Group C', loadExcelSheet(ExcelSheets.ethnicity_group_c_106))
+    math_reading_writing('Python Check - Sheet: 107 Ethnicity Group D', loadExcelSheet(ExcelSheets.ethnicity_group_d_107))
+    math_reading_writing('Python Check - Sheet: 119 Ethnicity Group E', loadExcelSheet(ExcelSheets.ethnicity_group_d_107))
     outputFile.close()
     print('processing completed')
 
@@ -122,7 +131,7 @@ def summary_calc(excel, title):
 
     outliers = excel[abs(z_score) > 3]
     # print(outliers)
-    #
+
     quantile_one = excel.quantile(.25)
     quantile_three = excel.quantile(.75)
     inter_quantile_range = quantile_three - quantile_one
@@ -130,17 +139,17 @@ def summary_calc(excel, title):
     lower_threshold = quantile_one - 1.5 * inter_quantile_range
 
     no_outliers = excel[abs(z_score) <= 3]
-    print(no_outliers)
+    # print(no_outliers)
 
-    savesameline(title + 'q1', quantile_one)
-    savesameline(title + 'q3', quantile_three)
-    savesameline(title + 'iqr', inter_quantile_range)
-    savesameline(title + 'upper', upper_threshold)
-    savesameline(title + 'lower', lower_threshold)
+    savesameline(title + ' - outliers out - quartile 1:', quantile_one)
+    savesameline(title + ' - outliers out - quartile 3:', quantile_three)
+    savesameline(title + ' - outliers out - inter quartile range:', inter_quantile_range)
+    savesameline(title + ' - outliers out - quartile upper threshold:', upper_threshold)
+    savesameline(title + ' - outliers out - quartile lower threshold:', lower_threshold)
 
-    savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
-    savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
-    savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
+    # savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
+    # savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
+    # savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
     newline()
 
 def math_reading_writing(title, excel):
