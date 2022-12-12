@@ -111,13 +111,19 @@ def start():
     math_reading_writing('Python Check - Sheet: 105 Ethnicity Group B', loadExcelSheet(ExcelSheets.ethnicity_group_b_105))
     math_reading_writing('Python Check - Sheet: 106 Ethnicity Group C', loadExcelSheet(ExcelSheets.ethnicity_group_c_106))
     math_reading_writing('Python Check - Sheet: 107 Ethnicity Group D', loadExcelSheet(ExcelSheets.ethnicity_group_d_107))
-    math_reading_writing('Python Check - Sheet: 119 Ethnicity Group E', loadExcelSheet(ExcelSheets.ethnicity_group_d_107))
+    """
+        had to do a workaround 
+        for some reason python could not pull the data from the sheet
+        so i copy pasted the table from 119 ethenicity E to the template and then had python
+        pull the data from the template and it worked and crunched the numbers        
+    """
+    math_reading_writing('Python Check - Sheet: 119 Ethnicity Group E', loadExcelSheet(ExcelSheets.template))
     outputFile.close()
     print('processing completed')
 
 
 def summary_calc(excel, title):
-    savesameline('==> Calculating: ', title)
+    savesameline('====> Calculating: ', title)
 
     np_mean = np.mean(excel)
     np_std = np.std(excel)
@@ -128,7 +134,11 @@ def summary_calc(excel, title):
     ex_range = int(excel.max()) - int(excel.min())
     ex_size = excel.size
 
-    savesameline('no outliers removed - straight calculation', '')
+    savesameline('==> record count: ', ex_size)
+
+    newline()
+
+    savesameline('no outliers removed - straight calculation - numpy calculated', '')
     savesameline(title + ' Scores Mean:', np_mean)
     savesameline(title + ' Scores Standard Deviation:', np_std)
     savesameline(title + ' Scores Median:', np_median)
@@ -137,6 +147,8 @@ def summary_calc(excel, title):
     savesameline(title + ' Scores Max:', ex_max)
     savesameline(title + ' Scores range:', ex_range)
     savesameline(title + ' Scores Count:', ex_size)
+
+    newline()
 
     std = excel.std()
     mean = np.mean(excel)
@@ -159,16 +171,22 @@ def summary_calc(excel, title):
     numpy_quantile_50 = str(np.percentile(excel_array, 50))
     numpy_quantile_75 = str(np.percentile(excel_array, 75))
 
-    savesameline(title + ' 25 percentile:', numpy_quantile_25)
-    savesameline(title + ' 50 percentile:', numpy_quantile_50)
-    savesameline(title + ' 75 percentile:', numpy_quantile_75)
+    newline()
+
+    savesameline(title + ' numpy - 25 quantile:', numpy_quantile_25)
+    savesameline(title + ' numpy - 50 quantile:', numpy_quantile_50)
+    savesameline(title + ' numpy - 75 quantile:', numpy_quantile_75)
+
+    newline()
 
     # manual removal of outliers  to check if outliers are being automatically removed on the above code by numpy
     no_outliers_values = excel
     if outliers.size:
-        savesameline('found these outliers: ', outliers)
+        savesameline('found these outliers: ', '')
+        savesameline('', outliers)
         no_outliers_values = excel.drop(outliers)
 
+    newline()
     outliers_removed_array = np.array(no_outliers_values.values.tolist())
 
     manual_quantile25 = str(np.quantile(outliers_removed_array, .25))
@@ -178,6 +196,8 @@ def summary_calc(excel, title):
     savesameline(title + ' - outliers manually removed - 25 percentile:', manual_quantile25)
     savesameline(title + ' - outliers manually removed - 50 percentile:', manual_quantile50)
     savesameline(title + ' - outliers manually removed - 75 percentile:', manual_quantile75)
+
+    newline()
 
     savesameline(title + ' quantile 25 - numpy: ' + numpy_quantile_25 + ' -- manual: ' + manual_quantile25, '')
     savesameline(title + ' quantile 50 - numpy: ' + numpy_quantile_50 + ' -- manual: ' + manual_quantile50, '')
@@ -195,8 +215,8 @@ def math_reading_writing(title, excel):
     reading_scores = excel.loc[:, ExcelColumns.reading.value]
 
     summary_calc(math_scores, 'Math')
-    # summary_calc(writing_scores, 'Writing')
-    # summary_calc(reading_scores, 'Reading')
+    summary_calc(writing_scores, 'Writing')
+    summary_calc(reading_scores, 'Reading')
 
     """
     stats.stats.zscore()
