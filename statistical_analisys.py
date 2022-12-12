@@ -18,6 +18,9 @@ https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html
 outliers 
 https://hersanyagci.medium.com/detecting-and-handling-outliers-with-pandas-7adbfcd5cad8
 https://linuxhint.com/pandas-remove-outliers/
+
+drop a value from a series
+https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.drop.html
 """
 
 #global variables
@@ -114,23 +117,31 @@ def start():
 
 
 def summary_calc(excel, title):
-    #print(type(excel), 'struct')
-    savesameline(title + ' Scores Mean:', np.mean(excel))
-    savesameline(title + ' Scores Standard Deviation:', np.std(excel))
-    savesameline(title + ' Scores Median:', np.median(excel))
-    savesameline(title + ' Scores Variance:', np.var(excel))
-    savesameline(title + ' Scores Minimum:', excel.min())
-    savesameline(title + ' Scores Max:', excel.max())
-    savesameline(title + ' Scores range:', int(excel.max()) - int(excel.min()))
-    savesameline(title + ' Scores Count:', excel.size)
+    savesameline('==> Calculating: ', title)
+
+    np_mean = np.mean(excel)
+    np_std = np.std(excel)
+    np_median = np.median(excel)
+    np_variance = np.var(excel)
+    ex_min = excel.min()
+    ex_max = excel.max()
+    ex_range = int(excel.max()) - int(excel.min())
+    ex_size = excel.size
+
+    savesameline('no outliers removed - straight calculation', '')
+    savesameline(title + ' Scores Mean:', np_mean)
+    savesameline(title + ' Scores Standard Deviation:', np_std)
+    savesameline(title + ' Scores Median:', np_median)
+    savesameline(title + ' Scores Variance:', np_variance)
+    savesameline(title + ' Scores Minimum:', ex_min)
+    savesameline(title + ' Scores Max:', ex_max)
+    savesameline(title + ' Scores range:', ex_range)
+    savesameline(title + ' Scores Count:', ex_size)
 
     std = excel.std()
     mean = np.mean(excel)
     z_score = (excel - mean) / std
-    # print(z_score, 'z-score')
-
     outliers = excel[abs(z_score) > 3]
-    # print(outliers)
 
     quantile_one = excel.quantile(.25)
     quantile_three = excel.quantile(.75)
@@ -138,18 +149,40 @@ def summary_calc(excel, title):
     upper_threshold = quantile_three + 1.5 * inter_quantile_range
     lower_threshold = quantile_one - 1.5 * inter_quantile_range
 
-    no_outliers = excel[abs(z_score) <= 3]
-    # print(no_outliers)
+    excel_array = np.array(excel.values.tolist())
 
-    savesameline(title + ' - outliers out - quartile 1:', quantile_one)
-    savesameline(title + ' - outliers out - quartile 3:', quantile_three)
-    savesameline(title + ' - outliers out - inter quartile range:', inter_quantile_range)
-    savesameline(title + ' - outliers out - quartile upper threshold:', upper_threshold)
-    savesameline(title + ' - outliers out - quartile lower threshold:', lower_threshold)
+    savesameline(title + ' inter quartile range - manually calculated:', inter_quantile_range)
+    savesameline(title + ' quartile upper threshold - manually calculated:', upper_threshold)
+    savesameline(title + ' quartile lower threshold - manually calculated:', lower_threshold)
 
-    # savesameline(title + ' Scores Quartile 1:', excel.quantile(.25))
-    # savesameline(title + ' Scores Quartile 2:', excel.quantile(.5))
-    # savesameline(title + ' Scores Quartile 3:', excel.quantile(.75))
+    numpy_quantile_25 = str(np.percentile(excel_array, 25))
+    numpy_quantile_50 = str(np.percentile(excel_array, 50))
+    numpy_quantile_75 = str(np.percentile(excel_array, 75))
+
+    savesameline(title + ' 25 percentile:', numpy_quantile_25)
+    savesameline(title + ' 50 percentile:', numpy_quantile_50)
+    savesameline(title + ' 75 percentile:', numpy_quantile_75)
+
+    # manual removal of outliers  to check if outliers are being automatically removed on the above code by numpy
+    no_outliers_values = excel
+    if outliers.size:
+        savesameline('found these outliers: ', outliers)
+        no_outliers_values = excel.drop(outliers)
+
+    outliers_removed_array = np.array(no_outliers_values.values.tolist())
+
+    manual_quantile25 = str(np.quantile(outliers_removed_array, .25))
+    manual_quantile50 = str(np.quantile(outliers_removed_array, .50))
+    manual_quantile75 = str(np.quantile(outliers_removed_array, .75))
+
+    savesameline(title + ' - outliers manually removed - 25 percentile:', manual_quantile25)
+    savesameline(title + ' - outliers manually removed - 50 percentile:', manual_quantile50)
+    savesameline(title + ' - outliers manually removed - 75 percentile:', manual_quantile75)
+
+    savesameline(title + ' quantile 25 - numpy: ' + numpy_quantile_25 + ' -- manual: ' + manual_quantile25, '')
+    savesameline(title + ' quantile 50 - numpy: ' + numpy_quantile_50 + ' -- manual: ' + manual_quantile50, '')
+    savesameline(title + ' quantile 75 - numpy: ' + numpy_quantile_75 + ' -- manual: ' + manual_quantile75, '')
+
     newline()
 
 def math_reading_writing(title, excel):
@@ -162,23 +195,16 @@ def math_reading_writing(title, excel):
     reading_scores = excel.loc[:, ExcelColumns.reading.value]
 
     summary_calc(math_scores, 'Math')
-    summary_calc(writing_scores, 'Writing')
-    summary_calc(reading_scores, 'Reading')
+    # summary_calc(writing_scores, 'Writing')
+    # summary_calc(reading_scores, 'Reading')
 
     """
-        stats.stats.zscore()
-        a_no_outliers = a[(np.abs(stats.zscore(a)) < 3)]
-        print(a_no_outliers)
+    stats.stats.zscore()
+    a_no_outliers = a[(np.abs(stats.zscore(a)) < 3)]
+    print(a_no_outliers)
+        
+    outliers = excel[(np.abs(stats.stats.zscore(excel)) < 3).all(axis=1)]
+    print(np.abs(stats.stats.zscore(excel)))
+    excel_no_outliers = excel[(np.abs(stats.stats.zscore(excel)) < 3)]
+    print(excel_no_outliers)
     """
-
-    print(type(excel))
-    # outliers = excel[(np.abs(stats.stats.zscore(excel)) < 3).all(axis=1)]
-    # print(np.abs(stats.stats.zscore(excel)))
-    # excel_no_outliers = excel[(np.abs(stats.stats.zscore(excel)) < 3)]
-    # print(excel_no_outliers)
-
-
-    #outliers
-    summary_calc(math_scores.dropna(), 'Math - Outliers removed -')
-    summary_calc(writing_scores.dropna(), 'Writing - Outliers removed -')
-    summary_calc(reading_scores.dropna(), 'Reading - Outliers removed -')
